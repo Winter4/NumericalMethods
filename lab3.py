@@ -33,9 +33,9 @@ def interpolate(xRequired, xUsed, yUsed):
         for j in range(size):
             # вычисление икса
             if (j == i): # если на главной диагонали
-                xEitkin[i][j] = xRequired - xSource[i] 
+                xEitkin[i][j] = xRequired - xUsed[i] 
                 mainProduct *= xEitkin[i][j]
-            else: xEitkin[i][j] = xSource[i] - xSource[j]
+            else: xEitkin[i][j] = xUsed[i] - xUsed[j]
             print(" %8.5f" % xEitkin[i][j], end = " ") # вывели икс
             
             dEitkin[i] *= xEitkin[i][j] # домножили икс
@@ -47,7 +47,6 @@ def interpolate(xRequired, xUsed, yUsed):
     print("\n Main product: ", "%.5f" % mainProduct, sep = "")
     print(" Y/D sum: ", "%.5f" % ydSum)
     return mainProduct * ydSum
-        
 
 # _________________________________________________________    
     
@@ -55,8 +54,8 @@ xSource = [] # список значений аргумента
 ySource = [] # список значений функции
 
 xLeft = 0 # левая граница значений аргумента
-xRight = 1 # правая граница значений аргумента
-nodesNumber = 7 # количество узлов интерполирования
+xRight = 0.2 # правая граница значений аргумента
+nodesNumber = 11 # количество узлов интерполирования
 step = (xRight - xLeft) / nodesNumber # шаг икса
 
 # __________ таблица значений функции _______
@@ -73,8 +72,8 @@ printLists(" Source: ", xSource, ySource)
 
 # ______ используемые узлы интерполяции ______
 #
-xUsed = [xSource[0], xSource[1], xSource[2], xSource[3], xSource[4]]
-yUsed = [ySource[0], ySource[1], ySource[2], ySource[3], ySource[4]]
+xUsed = [xSource[0], xSource[2], xSource[5], xSource[7], xSource[10]]
+yUsed = [ySource[0], ySource[2], ySource[5], ySource[7], ySource[10]]
 usedNodesNumber = len(xUsed)
 # ____________________________________________
 
