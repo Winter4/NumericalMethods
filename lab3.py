@@ -25,7 +25,8 @@ def interpolate(xRequired, xUsed, yUsed):
     mainProduct = 1 # произведение иксов на главной диагонали
     ydSum = 0 # сумма Yi/Di
     
-    print("\n  Eitkin table: ")
+    print ("__________________________________________________________")
+    print("\n\n  Eitkin table for ", "%.5f" % xRequired, ": ", sep = "")
     # заполнение матрицы иксов
     for i in range(size):
         
@@ -44,9 +45,11 @@ def interpolate(xRequired, xUsed, yUsed):
         ydSum += ydEitkin[i] # добавили к сумме
         print(" ||", "%8.5f" % dEitkin[i], "%8.5f" % yUsed[i], "%14.5f" % ydEitkin[i], sep = " ") # вывели столбцы после иксов
     
-    print("\n Main product: ", "%.5f" % mainProduct, sep = "")
-    print(" Y/D sum: ", "%.5f" % ydSum)
-    return mainProduct * ydSum
+    #print("\n Main product: ", "%.5f" % mainProduct, sep = "")
+    #print(" Y/D sum: ", "%.5f" % ydSum)
+    
+    print ("\n The Y is: ", "%8.5f" % (mainProduct * ydSum), sep = "")
+    print ("__________________________________________________________")
 
 # _________________________________________________________    
     
@@ -80,14 +83,12 @@ usedNodesNumber = len(xUsed)
 # вывод используемых узлов интерполяции
 printLists(" Used nodes: ", xUsed, yUsed)
 
-#testDots = [xSource[0] + 0.5*step, xSource[0] - 0.5*step, xSource[2] + 1.5*step, xSource[2] - 1.5*step, xSource[4] + 1.5*step,
-           #xSource[4] - 1.5*step, xSource[6] + 0.5*step, xSource[6] - 0.5*step, xSource[10] + 0.5*step, xSource[10] - 0.5*step]
+testDots = [xSource[0] + 0.5*step, xSource[0] - 0.5*step, xSource[2] + 1.5*step, xSource[2] - 1.5*step, xSource[4] + 1.5*step,
+           xSource[4] - 1.5*step, xSource[6] + 0.5*step, xSource[6] - 0.5*step, xSource[10] + 0.5*step, xSource[10] - 0.5*step]
 
 # __________________________________ main _____________________________________________________
 
-reqX = float(input("\n Enter X: "))
-reqY = interpolate(reqX, xUsed, yUsed)
-
-print ("\n The Y is: ", "%8.5f" % reqY, sep = "")
+for x in testDots:
+    interpolate(x, xUsed, yUsed)
 
 
