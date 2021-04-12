@@ -50,6 +50,7 @@ def interpolate(xRequired, xUsed, yUsed):
     
     print ("\n The Y is: ", "%8.5f" % (mainProduct * ydSum), sep = "")
     print ("__________________________________________________________")
+    return mainProduct * ydSum
 
 # _________________________________________________________    
     
@@ -88,7 +89,17 @@ testDots = [xSource[0] + 0.5*step, xSource[0] - 0.5*step, xSource[2] + 1.5*step,
 
 # __________________________________ main _____________________________________________________
 
-for x in testDots:
-    interpolate(x, xUsed, yUsed)
+if __name__ == "__main__":
+    yLaGrange = [0.0] * len(testDots)
+    i = 0
+    for x in testDots:
+        yLaGrange[i] = interpolate(x, xUsed, yUsed)
+        i += 1
+    
+    print ("     X", "    F true  ", " F lg ", "  mistake  ")
+    i = 0
+    for x in testDots:
+        print("%8.5f" % x, "%8.5f" % function(x), "%8.5f" % yLaGrange[i], "%15.12f" % math.fabs(function(x) - yLaGrange[i]), sep = " ")
+        i += 1
 
 
