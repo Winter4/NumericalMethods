@@ -27,6 +27,7 @@ def interpolate(xRequired, xUsed, yUsed):
     
     print ("__________________________________________________________")
     print("\n\n  Eitkin table for ", "%.5f" % xRequired, ": ", sep = "")
+    print ("                     X                             ", "Di", "Yi", "Yi/Di", sep = 7 * " ")
     # заполнение матрицы иксов
     for i in range(size):
         
@@ -89,17 +90,16 @@ testDots = [xSource[0] + 0.5*step, xSource[0] - 0.5*step, xSource[2] + 1.5*step,
 
 # __________________________________ main _____________________________________________________
 
-if __name__ == "__main__":
-    yLaGrange = [0.0] * len(testDots)
-    i = 0
-    for x in testDots:
-        yLaGrange[i] = interpolate(x, xUsed, yUsed)
-        i += 1
+yLaGrange = [0.0] * len(testDots)
+i = 0
+for x in testDots:
+    yLaGrange[i] = interpolate(x, xUsed, yUsed)
+    i += 1
     
-    print ("     X", "    F true  ", " F lg ", "  mistake  ")
-    i = 0
-    for x in testDots:
-        print("%8.5f" % x, "%8.5f" % function(x), "%8.5f" % yLaGrange[i], "%15.12f" % math.fabs(function(x) - yLaGrange[i]), sep = " ")
-        i += 1
+print ("     X", "    F true  ", " F lg ", "  mistake  ")
+i = 0
+for x in testDots:
+    print("%8.5f" % x, "%8.5f" % function(x), "%8.5f" % yLaGrange[i], "%15.12f" % math.fabs(function(x) - yLaGrange[i]), sep = " ")
+    i += 1
 
 
