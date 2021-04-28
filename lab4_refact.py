@@ -17,28 +17,50 @@ def print_diffs(diffs):
     print()
     
 def differentiate_first(x_required, step, x_source, y_source, diffs):
+    q = (x_required - x_source[0]) / step 
+    
+    result = 0.0 # Будущий результат
+    factorial = 1 # Накопление факториала
+    
+    for i in range(len(diffs)): # Самый внешний цикл (сумма)
+        bracket_sum = 0.0 # Накопление суммы
+        
+        for j in range(i): # Сумма произведений (Сумма по j)
+            bracket_product = 1 # Накопление произведения
+            for k in range(i): # Произведения разности q - k (Произведение по k)
+                if (k != j): bracket_product *= q - k
+            bracket_sum += bracket_product # Собственно накопление
+                       
+        factorial *= i + 1 # Вычисление факториала
+        
+        # Проверяем на умножение на 0
+        result += diffs[i][0] / factorial if (bracket_sum == 0) else diffs[i][0] / factorial * bracket_sum
+        #print("Bracket sum", i, bracket_sum) # Отладочный принт
+        
+    return result / step
+
+def differentiate_second(x_required, step, x_source, y_source, diffs):
     q = (x_required - x_source[0]) / step
     
-    result = y_source[0]
-    factorial = 1
+    result = 0.0 # Будущий результат
+    factorial = 1 # Накопление факториала
     
-    bracket_sum = 0
-    bracket_product = 1
-    
-    for i in range(len(diffs)): # Main loop
-        bracket_sum = 0 # Sum of products
-        for j in range(i - 1): # Sum loop
-            bracket_product = 1 # Product(q - k)
-            for k in range(i - 1): # Product loop
-                if (k != j): bracket_product *= q - k
-            bracket_sum += bracket_product
-                       
-        factorial *= i + 1
-        bracket_sum *= diffs[i][0] / factorial
-        result += bracket_sum
+    for i in range(2, len(diffs)): # Самый внешний цикл (сумма)
+        bracket_sum1 = 0 # Накопление 
         
-def differentiate_second(x_required, step):
-    return((differentiate_first(x_required + step, step) - differentiate_first(x_required, step)) / step) 
+        for j in range(i): # Сумма по j
+            bracket_sum2 = 0.0
+            
+            for k in range(i): # Сумма по k
+                bracket_product = 1.0
+                if (k != j):
+                    for l in range(i): # Произведение по l
+                        if (l != k and l != j): bracket_product *= q - l
+                    bracket_sum2 += bracket_product
+            
+            bracket_sum1 += bracket_sum2
+        result += diffs[i][0] / factorial 
+    return result / step**2
 
     # main
     
@@ -86,8 +108,10 @@ for diff_len in range(values_number - 2, 0, -1):
             
 print_diffs(diffs)
 
-print("  X", "d1", "d2", sep = 10c * " ")
+#print("  X", "d1", "d2", sep = 10 * " ")
 args = [-0.18, 0.18, -0.45, 0.45, 0.775, 1.225, 0.55, 1.45]
+print (differentiate_first(0.18, step, x_source, y_source, diffs))
+print (differentiate_second(0.18, step, x_source, y_source, diffs))
 
-for x in args:
-    print("%6.2f" % x, "%11.6f" % differentiate_first(x, step), "%11.6f" % differentiate_second(x, step))
+#for x in args:
+   # print("%6.2f" % x, "%11.6f" % differentiate_first(x, step, x_source, y_source, diffs))
