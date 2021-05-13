@@ -3,26 +3,13 @@ import math
 def function(x_required):
     return math.exp(math.sin(x_required))
 
-def d1(x_required):
+def d1_manual(x_required):
     return math.exp(math.sin(x_required) * math.cos(x_required))
 
-def d2(x_required):
+def d2_manual(x_required):
     return (-math.sin(x) + (math.cos(x_required))**2) * math.exp(math.sin(x_required))
-
-def print_diffs(diffs):
-    # шапка таблицы разностей
-    for i in range(len(diffs)):
-        print(" dY[", i + 1, "]     ", sep = "", end = "")
-    print()
     
-    # значения таблицы разностей
-    for i in range(len(diffs)):
-        for j in range(len(diffs[i])):
-            print("%-11.6f" % diffs[j][i], sep = "", end = "")
-        print()
-    print()
-    
-def differentiate_first(x_required, step, x_source, y_source, diffs):
+def d1_nuton(x_required, step, x_source, y_source, diffs):
     q = (x_required - x_source[0]) / step 
     
     result = 0.0 # Будущий результат
@@ -45,51 +32,43 @@ def differentiate_first(x_required, step, x_source, y_source, diffs):
         
     return result / step
 
-def differentiate_second(x_required, step, x_source, y_source, diffs):
+def d2_nuton(x_required, step, x_source, y_source, diffs):
     q = (x_required - x_source[0]) / step
     
-    result = 0.0 # Будущий результат
-    factorial = 1 # Накопление факториала
+    result = diffs[2][0] # Будущий результат
+    factorial = 2 # Накопление факториала
     
-    for i in range(2, len(diffs)): # Самый внешний цикл (сумма)
-        bracket_sum1 = 0 # Накопление 
+    for i in range(3, len(diffs)): # Самый внешний цикл (сумма)  1
+        bracket_sum = 0 # Накопление 
+        factorial *= i
         
-        for j in range(i): # Сумма по j
-            bracket_sum2 = 0.0
+        for j in range(i): # Сумма по j                          2
             
-            for k in range(i): # Сумма по k
-                bracket_product = 1.0
-                if (k != j):
-                    for l in range(i): # Произведение по l
-                        if (l != k and l != j): bracket_product *= q - l
-                    bracket_sum2 += bracket_product
+            for k in range(i): # Сумма по k                      3        
+                if (k != j):   #                                 4
+                    bracket_product = 1.0
+                    for l in range(i): # Произведение по l       5
+                        if (l != k and l != j): #                6
+                            bracket_product *= q - l
+                    bracket_sum += bracket_product
             
-            bracket_sum1 += bracket_sum2
-        result += diffs[i][0] / factorial * bracket_sum1
-    return -result / step**2
+        result += bracket_sum * diffs[i][0] / factorial
+    return result / step**2
 
-def differentiate_first_manual(x_required, step, x_min, diffs):
-    t = (x_required - x_min) / step
+def print_diffs(diffs):
+    # шапка таблицы разностей
+    for i in range(len(diffs)):
+        print(" dY[", i + 1, "]     ", sep = "", end = "")
+    print()
     
-    tmp = []
-    tmp.append(diffs[0][0])
-    tmp.append((2*t - 1) / 2 * diffs[1][0])
-    tmp.append((3*t**2 - 6*t**2 + 2) / 6 * diffs[2][0])
-    tmp.append((4*t**3 - 18*t**2 + 22*t - 6) / 24 * diffs[3][0])
-    #tmp.append(())
-    return sum(tmp) / step
-
-def differentiate_second_manual(x_required, step, x_min, diffs):
-    t = (x_required - x_min) / step
+    # значения таблицы разностей
+    for i in range(len(diffs)):
+        for j in range(len(diffs[i])):
+            print("%-11.6f" % diffs[j][i], sep = "", end = "")
+        print()
+    print()
     
-    tmp = []
-    tmp.append(diffs[1][0])
-    tmp.append((t - 1)*diffs[2][0])
-    tmp.append((6*t**2 - 18*t + 11) / 12 * diffs[3][0])
-    
-    return -sum(tmp) / step**2
-    
-    # main
+# __________________________________ main ______________________________________
     
 x_source = [] # список аргументов
 y_source = [] # список значений функции
@@ -137,13 +116,6 @@ print_diffs(diffs)
 
 print("  X", "d1 N", "d1 M", "d2 N", "d2 M", sep = 8 * " ")
 args = [-0.18, 0.18, -0.45, 0.45, 0.775, 1.225, 0.55, 1.45]
-#print (differentiate_first(0.18, step, x_source, y_source, diffs))
-#print (differentiate_second(0.18, step, x_source, y_source, diffs))
-#print()
-#print(differentiate_first_manual(0.18, step, x_source[0], diffs))
-#print(differentiate_second_manual(0.18, step, x_source[0], diffs))
 
 for x in args:
-    #print("%6.2f" % x, "%11.6f" % differentiate_first(x, step, x_source, y_source, diffs), "%11.6f" % differentiate_second(x, step, x_source, y_source, diffs), "%11.6f" % differentiate_first_manual(x, step, x_source[0], diffs), "%11.6f" % differentiate_second_manual(x, step, x_source[0], diffs))
-
-    print("%6.2f" % x, "%11.6f" % differentiate_first(x, step, x_source, y_source, diffs), "%11.6f" % d1(x), "%11.6f" % differentiate_second(x, step, x_source, y_source, diffs), "%11.6f" % d2(x))
+    print("%6.2f" % x, "%11.6f" % d1_nuton(x, step, x_source, y_source, diffs), "%11.6f" % d1_manual(x), "%11.6f" % d2_nuton(x, step, x_source, y_source, diffs), "%11.6f" % d2_manual(x))
