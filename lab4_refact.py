@@ -106,7 +106,7 @@ for diff_len in range(values_number - 2, 0, -1):
 
     # текущий индекс с начала списка
     column_index = values_number - 1 - diff_len
-    
+
     # для всех разностей этого порядка
     for i in range(diff_len):
         # заполнение разностей
@@ -114,8 +114,12 @@ for diff_len in range(values_number - 2, 0, -1):
             
 print_diffs(diffs)
 
-print("  X", "d1 N", "d1 M", "d2 N", "d2 M", sep = 8 * " ")
+print("  X", "d1 N", "d1 M", "d2 N", "d2 M", "mist1", "mist2", sep = 8 * " ")
 args = [-0.18, 0.18, -0.45, 0.45, 0.775, 1.225, 0.55, 1.45]
 
 for x in args:
-    print("%6.2f" % x, "%11.6f" % d1_nuton(x, step, x_source, y_source, diffs), "%11.6f" % d1_manual(x), "%11.6f" % d2_nuton(x, step, x_source, y_source, diffs), "%11.6f" % d2_manual(x))
+    d1n = d1_nuton(x, step, x_source, y_source, diffs)
+    d1m = d1_manual(x)
+    d2n = d2_nuton(x, step, x_source, y_source, diffs)
+    d2m = d2_manual(x)
+    print("%6.2f" % x, "%11.6f" % d1n, "%11.6f" % d1m, "%11.6f" % d2n, "%11.6f" % d2m, " ", "%.10f" % math.fabs(d1n - d1m), " ", "%.10f" % math.fabs(d2n - d2m))
