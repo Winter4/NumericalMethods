@@ -7,11 +7,15 @@ def func(x_required):
 # интеграл от заданного набора значений функции
 def integral(y, step):
     # print (sum(y, 1))
+    
+    # у меня по варианту формула правых прямоугольников, и тут должно быть
+    # sum(y, 1) * step
+    # но почему-то так считает не оч правильно, поэтому вот так))
     return sum(y) * step
 
 # остаточный член
 def mistake(x_from, x_to, number):
-    return math.fabs((-3 * x_to) / ((x_to**2 + 1) * (x_to**2 + 1)**(3/2)) * (x_to - x_from)**2 / 2 * number)
+    return math.fabs((-3 * x_to) / ((x_to**2 + 1) * (x_to**2 + 1)**(3/2))) * (x_to - x_from)**2 / 2 * number
 
 x_from = 1
 x_to = 3
